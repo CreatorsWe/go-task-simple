@@ -43,6 +43,27 @@ task 是类似 make 这类的自动化执行脚本，配置文件名为 `Taskfil
 + 命令正常执行： output（标准输出） + success prompt([task]step %n: execute success.)；
   + silent 时静默；
   + parallel 时, 打印信息要加锁输出（收集后输出，避免阻塞命令执行阶段）
-+ 命令执行错误：output( 标准输出 ) + failed prompt([task]step %n: execute failed: %err: exitcode status: %code.)；
++ 命令执行错误：output( 标准输出 ) + failed prompt([task]step %n: execute fail: %err: exitcode status: %code.)（stdaerr）；
   + 错误信息不会静默，一定会打印
   + continue 时，打印错误信息，继续执行下一条任务而不退出
+
+### `architecture`
+
+命令行由 parse_flag() 函数解析后返回各子命令枚举或者接口，每个子命令枚举有 run 方法用于执行操作，run() 不返回错误信息，所有信息在内部打印。表明要进行的操作.
+
+`ListCommand` 和 `TaskCommand` 需要解析 `configure`, parse_configure() (*Config, error)返回解析，变量替换后的 Config 类型.
+
+`TaskCommand` run() --> run_single_command()(wrap_output, err) 封装对每个条任务的执行，函数返回打印信息和错误。
++ silent 和 continue 为标志位
++ parallel 单独执行 run_parallel()
+
+### `development progress`
+
+- [x] print message wrap, TESTING  //  包装打印信息
+- [x] parse_flag(), TESTING
+- [x] HelpCommand::run(), VersionCommand::run(), InitCommand::run(), TESTING
+- [x] parse_config(), TESTING
+- [x] ListCommand::run(), TESTING
+- [ ] TaskCommand::run(), TESTING
+- [ ] run_with_parallel(), TESTING
+- [ ] run_single_command(),TESTING

@@ -7,31 +7,32 @@ import (
 	"io/fs"
 	"os"
 	"path/filepath"
-
-	"github.com/fatih/color"
 )
 
-const TEMPLATE = `[task.build]
-cmds = [
-    ""
-]
-desc = ""
-silent = false
+type InitCommand struct{}
 
-[task.run]
-cmds = [
-    ""
-]
-desc = ""
-silent = false`
+func (ic InitCommand) run() {
+	const TEMPLATE = `# yaml-language-server: $schema=none
+tasks:
+  build:
+    desc:
+    cmds:
+      -
+  run:
+    desc:
+    cmds:
+      -
+  clean:
+    desc:
+    cmds:
+      -
+`
 
-const TEMPLATE_NAME = "Taskfile.toml"
-
-func init_template() error {
 	wd, err := os.Getwd()
 	if err != nil {
-		msg := color.RedString("[init-tempalte failed] %s", err)
-		return errors.New(msg)
+		msg := error_msg_without_run(err.Error())
+		fmt.Fprintln(os.Stderr, msg)
+		os.Exit(1)
 	}
 
 	template_path := filepath.Join(wd, TEMPLATE_NAME)
@@ -42,19 +43,19 @@ func init_template() error {
 		if scanner.Scan() {
 			judgement := scanner.Text()
 			if judgement == "n" {
-				return nil
+				os.Exit(0)
 			}
 			if judgement != "n" && judgement != "y" {
-				msg := color.RedString("[init-template failed] unexpected input: %s", judgement)
-				return errors.New(msg)
+				msg := error_msg_without_run("unexpected input: %s", judgement)
+				fmt.Println(msg)
+				os.Exit(0)
 			}
 		}
 	}
 
 	if err := os.WriteFile(template_path, []byte(TEMPLATE), 0666); err != nil {
-		msg := color.RedString("[init-tempalte failed] %s", err)
-		return errors.New(msg)
+		msg := error_msg_without_run(err.Error())
+		fmt.Fprintln(os.Stderr, msg)
+		os.Exit(1)
 	}
-
-	return nil
 }
