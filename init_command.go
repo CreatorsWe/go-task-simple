@@ -12,7 +12,7 @@ import (
 type InitCommand struct{}
 
 func (ic InitCommand) run() {
-	const TEMPLATE = `# yaml-language-server: $schema=none
+	const TEMPLATE = `# yaml-language-server: $schema=https://gh-proxy.com/https://raw.githubusercontent.com/CreatorsWe/task-schema/main/task-schema.json
 tasks:
   build:
     desc:
