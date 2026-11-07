@@ -1,2 +1,6 @@
 *.yml
 go-task
+task
+README.md
+*_test.go
+go.sum

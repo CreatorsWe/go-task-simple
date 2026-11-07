@@ -1,4 +1,4 @@
-module go-task
+module task
 
 go 1.26.10
 

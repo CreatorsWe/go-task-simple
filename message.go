@@ -24,7 +24,7 @@ func msg_task_success(output, task_name string, step int) string {
 
 // 任务执行失败返回的信息
 func msg_task_fail(output, task_name string, step int, err_msg string, exitcode int, silent bool) string {
-	fail_prompt := fmt.Sprintf("\x1b[31m[%s]step %d: execute fial. exitcode status: %d\n%s\x1b[0m", task_name, step, exitcode, err_msg)
+	fail_prompt := fmt.Sprintf("\x1b[31m[%s]step %d: execute fail. exitcode status: %d\n%s\x1b[0m", task_name, step, exitcode, err_msg)
 	var wrap_msg string
 	output_trim := strings.TrimSpace(output)
 	if silent || output_trim == "" {
