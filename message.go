@@ -12,29 +12,6 @@ func error_msg_without_run(content string, args ...any) string {
 	return fmt.Sprintf("\x1b[31m%s\x1b[0m", content)
 }
 
-// // 任务成功执行返回的信息
-// func msg_task_success(output, task_name string, step int) string {
-// 	success_prompt := fmt.Sprintf("\x1b[32m[%s]step %d: execute success\x1b[0m", task_name, step)
-// 	output_trim := strings.TrimSpace(output)
-// 	if output_trim == "" {
-// 		return fmt.Sprint(success_prompt)
-// 	}
-// 	return fmt.Sprintf("%s\n%s", output_trim, success_prompt)
-// }
-
-// 任务执行失败返回的信息
-// func msg_task_fail(output, task_name string, step int, err_msg string, exitcode int, silent bool) string {
-// 	fail_prompt := fmt.Sprintf("\x1b[31m[%s]step %d: execute fial. exitcode status: %d\n%s\x1b[0m", task_name, step, exitcode, err_msg)
-// 	var wrap_msg string
-// 	output_trim := strings.TrimSpace(output)
-// 	if silent || output_trim == "" {
-// 		wrap_msg = fail_prompt
-// 	} else {
-// 		wrap_msg = fmt.Sprintf("%s\n%s", output_trim, fail_prompt)
-// 	}
-// 	return wrap_msg
-// }
-
 // timeout 包装信息
 func msg_timeout(task_name string, timeout uint64) string {
 	timeout_prompt := fmt.Sprintf("\x1b[31m[%s]timetout in %d seconds\x1b[0m", task_name, timeout)
