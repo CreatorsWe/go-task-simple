@@ -27,7 +27,7 @@ type Config struct {
 	Tasks map[string]Task `yaml:"tasks"`
 }
 
-func parse_config() *Config {
+func parse_config(flag_vars map[string]string) *Config {
 	wd, err := os.Getwd()
 	if err != nil {
 		msg := error_msg_without_run(err.Error())
@@ -56,6 +56,17 @@ func parse_config() *Config {
 		msg := error_msg_without_run(err.Error())
 		fmt.Fprintln(os.Stderr, msg)
 		os.Exit(1)
+	}
+
+	// flags 改变 vars
+	for vari, value := range flag_vars {
+		if _, ok := config.Vars[vari]; ok {
+			config.Vars[vari] = value
+		} else {
+			msg := error_msg_without_run("unknown flag variable: %s", vari)
+			fmt.Println(msg)
+			os.Exit(1)
+		}
 	}
 
 	// repalce variable

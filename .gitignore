@@ -1,2 +1,4 @@
 *.yml
 go-task
+task
+go.sum

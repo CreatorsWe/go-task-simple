@@ -8,7 +8,7 @@ task 是类似 make 这类的自动化执行脚本，配置文件名为 `Taskfil
 ```yml
   vars:
     greet: hello, world!
-    count: 3
+    count: 3   # 和 count; '3' 没什么区别
   tasks:
     default:
       desc: echo commands

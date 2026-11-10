@@ -8,7 +8,7 @@ import (
 type ListCommand struct{}
 
 func (lc ListCommand) run() {
-	config := parse_config()
+	config := parse_config(nil)
 
 	if config == nil {
 		msg := error_msg_without_run("empty configure")
