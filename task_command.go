@@ -49,7 +49,7 @@ func (tc TaskCommand) run() {
 	}
 
 	return_chan := make(chan struct{})
-	// timtout
+
 	go func() {
 		if task.Parallel {
 			_run_with_parallel(tc.task_name, &task)
@@ -86,7 +86,7 @@ func _run_with_parallel(task_name string, task *Task) {
 			continue
 		}
 		wg.Go(func() {
-			exiterror, status := _run_single_command(cmd, task.Silent)
+			exiterror, status := _run_single_command(cmd, task.Silent, task.Shell)
 			// 执行失败，但是 continue, 错误信息必须打印
 			switch status {
 			case Success:
@@ -113,7 +113,7 @@ func _run_in_order(task_name string, task *Task) {
 		if cmd == "" {
 			continue
 		}
-		exiterror, status := _run_single_command(cmd, task.Silent)
+		exiterror, status := _run_single_command(cmd, task.Silent, task.Shell)
 		// 执行失败，但是 continue, 错误信息必须打印
 		switch status {
 		case Success:
@@ -132,13 +132,19 @@ func _run_in_order(task_name string, task *Task) {
 }
 
 // 执行一条命令原语，返回拼接后的输出信息和错误
-func _run_single_command(command string, silent bool) (*Exiterror, ExecutionStatus) {
+func _run_single_command(command string, silent bool, shell bool) (*Exiterror, ExecutionStatus) {
 	// output 是 stdout ; err 是 stderr
 	// Command 执行命令返回的 err 接口底层类型就是 ExitCode 类型
 	// CommandContext 带超时机制，但是 CommandContext 仅取消子进程，会导致孤儿进程，需要手动设置子进程为进程组 leader，才能取消进程组
 	// timeout 会自动终止整个进程组，被 timeout 终止返回 124 exitcode
 	// sh -c 只有第一个非选项参数是“命令字符串”, 它之后的所有参数作为位置参数（$0、$1、$2...）传给这个脚本
-	var cmd *exec.Cmd = exec.Command("sh", "-c", command)
+	var cmd *exec.Cmd
+
+	if shell {
+		cmd = exec.Command("sh", "-c", command)
+	} else {
+		cmd = exec.Command(command)
+	}
 
 	// 直接将命令的标准输出重定向到终端
 	// 重定向到给定的错误缓冲区

@@ -53,6 +53,9 @@
           },
           "parallel": {
             "type": "boolean"
+          },
+          "shell": {
+            "type": "boolean"
           }
         },
         "required": ["cmds"],

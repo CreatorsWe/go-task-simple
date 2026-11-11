@@ -21,6 +21,7 @@ type Task struct {
 	Parallel bool     `yaml:"parallel"`
 	Continue bool     `yaml:"continue"`
 	Timeout  uint64   `yaml:"timeout"`
+	Shell    bool     `yaml:"shell"`
 }
 type Config struct {
 	Vars  map[string]any  `yaml:"vars"`
